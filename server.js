@@ -41,14 +41,15 @@ io.configure('production', function(){
     io.enable('browser client etag');          // apply etag caching logic based on version number
     io.enable('browser client gzip');          // gzip the file
     io.enable('browser client etag');
-    io.set('log level', 2);
-    io.set('close timeout', 1500);
+    //io.set('log level', 2);
+    //io.set('close timeout', 1500);
     io.set('transports', [
         'websocket'
-        , 'flashsocket'
+        /*, 'flashsocket'
         , 'htmlfile'
         , 'xhr-polling'
         , 'jsonp-polling'
+        */
     ]);
 });
 
