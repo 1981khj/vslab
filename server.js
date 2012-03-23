@@ -36,6 +36,10 @@ app.get('/mobile', function(req, res) {
     res.render('mobile');
 });
 
+app.get('/am', function(req, res) {
+    res.render('am');
+});
+
 io.configure('production', function(){
     io.enable('browser client minification');  // send minified client
     io.enable('browser client etag');          // apply etag caching logic based on version number
@@ -58,8 +62,13 @@ io.configure('development', function(){
 });
 
 io.sockets.on('connection', function(socket) {
-    socket.on('receiveImg', function(data){        
+    socket.on('receiveImg', function(data){
         io.sockets.emit('drawImg', data);
+        io.sockets.emit('imgdata', data);
+    });
+    
+    socket.on('join', function(){
+        io.sockets.emit('join');
     });
     
     socket.on('disconnect', function(){                
