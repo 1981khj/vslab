@@ -1,4 +1,5 @@
-var port = process.env.PORT;
+//var port = process.env.PORT;
+var port = process.env.port;
 var express = require('express');
 var app = express.createServer();
 var io = require('socket.io').listen(app);
@@ -29,7 +30,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/teacher', function(req, res) {
-    
     res.render('index');
 });
 
@@ -37,42 +37,39 @@ app.get('/mobile', function(req, res) {
     res.render('mobile');
 });
 
-/*io.configure('production', function(){    
-    //io.set('log level', 2);    
-    io.set('transports', ['websocket']);
+app.get('/am', function(req, res) {
+    res.render('am');
 });
 
-io.configure('development', function(){
-    io.set('transports', ['websocket']);
-});*/
-
-io.configure(function () { 
+io.configure('production', function(){
     io.enable('browser client minification');  // send minified client
     io.enable('browser client etag');          // apply etag caching logic based on version number
     io.enable('browser client gzip');          // gzip the file
     io.enable('browser client etag');
-    io.set('log level', 1);
-    /*io.set("transports", ["xhr-polling"]); */
     io.set('transports', [
-        'xhr-polling'
-        , 'websocket'
+        'websocket'
+    ]);
+});
+
+io.configure('development', function(){    
+    io.set('transports', [
+        'websocket'
+        , 'xhr-polling'
         , 'flashsocket'
         , 'htmlfile'
         , 'jsonp-polling'
     ]);
-    /*io.set("polling duration", 10); */
+    //io.set("polling duration", 10); 
 });
 
 io.sockets.on('connection', function(socket) {
-    io.sockets.emit('join');
-    
-    socket.on('join', function(){
-        socket.emit('join');
+    socket.on('receiveImg', function(data){
+        io.sockets.emit('drawImg', data);
+        io.sockets.emit('imgdata', data);
     });
     
-    socket.on('receiveImg', function(data){        
-        io.sockets.volatile.emit('imgdata', data);
-        io.sockets.volatile.emit('drawImg', data);
+    socket.on('join', function(){
+        io.sockets.emit('join');
     });
     
     socket.on('disconnect', function(){                
