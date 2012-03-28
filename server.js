@@ -52,7 +52,7 @@ io.configure(function () {
     io.enable('browser client gzip');          // gzip the file
     io.enable('browser client etag');
     io.set('log level', 1);
-    /*io.set("transports", ["xhr-polling"]); */
+    
     io.set('transports', [
         'xhr-polling'
         , 'websocket'
@@ -60,12 +60,11 @@ io.configure(function () {
         , 'htmlfile'
         , 'jsonp-polling'
     ]);
+    /*io.set("transports", ["xhr-polling"]); */
     /*io.set("polling duration", 10); */
 });
 
 io.sockets.on('connection', function(socket) {
-    io.sockets.emit('join');
-    
     socket.on('join', function(){
         socket.emit('join');
     });
